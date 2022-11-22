@@ -4,7 +4,7 @@
   "description": "TypeScript learning preoject",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc --watch"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/smtexx/todo-list/issues"
   },
-  "homepage": "https://github.com/smtexx/todo-list#readme"
+  "homepage": "https://github.com/smtexx/todo-list#readme",
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  }
 }
