@@ -58,6 +58,25 @@ async function initApp() {
   }
 }
 
+async function handleFormSubmit(event: SubmitEvent) {
+  event.preventDefault();
+
+  try {
+    // Get todo from form fields
+    const todo = getTodo();
+    // Register
+    const registeredTodo = await registerTodo(todo);
+    // Render
+    renderTodo(registeredTodo);
+    todosStore.push(registeredTodo);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error);
+      alert('Unable to create new TODO, please try later');
+    }
+  }
+}
+
 (function () {
   // Globals
   // const todoList = document.getElementById('todo-list');
