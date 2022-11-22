@@ -10,13 +10,61 @@ interface Todo {
   completed: boolean;
 }
 
+enum GlobalIDs {
+  TODOS_UL_ID = 'todo-list',
+  USERS_SELECT_ID = 'user-select',
+  TODO_FORM_ID = 'todo-form',
+}
+
+// Global stores
+let todosStore: Todo[] = [];
+let usersStore: User[] = [];
+
+// Global objects
+const todoList = document.getElementById(GlobalIDs.TODOS_UL_ID);
+const userSelect = document.getElementById(GlobalIDs.USERS_SELECT_ID);
+const todoForm = document.getElementById(GlobalIDs.TODO_FORM_ID);
+
+// Init App
+document.addEventListener('DOMContentLoaded', initApp);
+
+async function initApp() {
+  try {
+    // Add submit listener to form
+    if (todoForm) {
+      todoForm.addEventListener('submit', handleFormSubmit);
+    } else {
+      throw new Error(`Unable to find todo FORM#${GlobalIDs.TODO_FORM_ID}`);
+    }
+
+    // Add click listener to list of todos
+    if (todoList) {
+      todoList.addEventListener('click', handleClickOnTodo);
+    } else {
+      throw new Error(`Unable to find todo FORM#${GlobalIDs.TODOS_UL_ID}`);
+    }
+
+    // Get and render users and todos
+    usersStore = await getUsers();
+    todosStore = await getTodos();
+
+    usersStore.forEach((user) => renderUserOption(user));
+    todosStore.forEach((todo) => renderTodo(todo));
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error);
+      alert('Something is broken! Operation of the application is impossible');
+    }
+  }
+}
+
 (function () {
   // Globals
-  const todoList = document.getElementById('todo-list');
-  const userSelect = document.getElementById('user-select');
-  const form = document.querySelector('form');
-  let todos: Todo[] = [];
-  let users: User[] = [];
+  // const todoList = document.getElementById('todo-list');
+  // const userSelect = document.getElementById('user-select');
+  // const form = document.querySelector('form');
+  // let todos: Todo[] = [];
+  // let users: User[] = [];
 
   // Init App
   document.addEventListener('DOMContentLoaded', initApp);
@@ -71,9 +119,7 @@ interface Todo {
       todo
         ?.querySelector('input')
         ?.removeEventListener('change', handleTodoChange);
-      todo
-        ?.querySelector('.close')
-        ?.removeEventListener('click', handleClose);
+      todo?.querySelector('.close')?.removeEventListener('click', handleClose);
       todo?.remove();
     }
   }
@@ -172,10 +218,7 @@ interface Todo {
     }
   }
 
-  async function toggleTodoComplete(
-    todoId: number,
-    completed: boolean
-  ) {
+  async function toggleTodoComplete(todoId: number, completed: boolean) {
     try {
       const response = await fetch(
         `https://jsonplaceholder.typicode.com/todos/${todoId}`,
@@ -189,9 +232,7 @@ interface Todo {
       );
 
       if (!response.ok) {
-        throw new Error(
-          'Failed to connect with the server! Please try later.'
-        );
+        throw new Error('Failed to connect with the server! Please try later.');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -215,9 +256,7 @@ interface Todo {
       if (response.ok) {
         removeTodo(todoId);
       } else {
-        throw new Error(
-          'Failed to connect with the server! Please try later.'
-        );
+        throw new Error('Failed to connect with the server! Please try later.');
       }
     } catch (error) {
       if (error instanceof Error) {
