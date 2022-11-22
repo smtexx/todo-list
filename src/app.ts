@@ -10,10 +10,13 @@ interface Todo {
   completed: boolean;
 }
 
+type UnregisteredTodo = Omit<Todo, 'id'>;
+
 enum GlobalIDs {
   TODOS_UL_ID = 'todo-list',
   USERS_SELECT_ID = 'user-select',
   TODO_FORM_ID = 'todo-form',
+  INPUT_FIELD = 'new-todo',
 }
 
 // Global stores
@@ -24,6 +27,7 @@ let usersStore: User[] = [];
 const todoList = document.getElementById(GlobalIDs.TODOS_UL_ID);
 const userSelect = document.getElementById(GlobalIDs.USERS_SELECT_ID);
 const todoForm = document.getElementById(GlobalIDs.TODO_FORM_ID);
+const inputField = document.getElementById(GlobalIDs.INPUT_FIELD);
 
 // Init App
 document.addEventListener('DOMContentLoaded', initApp);
@@ -75,6 +79,30 @@ async function handleFormSubmit(event: SubmitEvent) {
       alert('Unable to create new TODO, please try later');
     }
   }
+}
+
+function getTodo(): UnregisteredTodo | never {
+  const newTodo: UnregisteredTodo = {
+    userId: 0,
+    title: '',
+    completed: false,
+  };
+
+  if (userSelect instanceof HTMLSelectElement) {
+    newTodo.userId = Number(userSelect.value);
+  } else {
+    throw new Error(
+      `Unable to get userId from SELECT#${GlobalIDs.USERS_SELECT_ID}`
+    );
+  }
+
+  if (inputField instanceof HTMLInputElement) {
+    newTodo.title = inputField.value;
+  } else {
+    throw new Error(`Unable to get title from INPUT#${GlobalIDs.INPUT_FIELD}`);
+  }
+
+  return newTodo;
 }
 
 (function () {
