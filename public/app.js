@@ -177,7 +177,7 @@ var GlobalIDs;
         input.checked = todo.completed;
         var close = document.createElement('span');
         close.className = 'todo-close';
-        close.textContent = '&times;';
+        close.textContent = '×';
         li.prepend(input);
         li.append(close);
         if (todoList) {

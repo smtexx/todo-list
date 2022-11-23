@@ -136,7 +136,7 @@ enum GlobalIDs {
 
     const close = document.createElement('span');
     close.className = 'todo-close';
-    close.textContent = '&times;';
+    close.textContent = '×';
 
     li.prepend(input);
     li.append(close);
