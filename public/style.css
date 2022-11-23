@@ -60,12 +60,12 @@ ul {
   height: 1.25rem;
 }
 
-.close {
+.todo-close {
   color: red;
   cursor: pointer;
   font-weight: bolder;
   font-size: 1.7rem;
 }
-.close:hover {
+.todo-close:hover {
   color: tomato;
 }
