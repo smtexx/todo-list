@@ -247,6 +247,82 @@ function deleteTodo(todoId: number) {
   const todoElement = todoList?.querySelector(`li[data-id=${todoId}]`);
   todoElement?.remove();
 }
+async function getUsers(): Promise<User[]> {
+  const response = await fetch(
+    'https://jsonplaceholder.typicode.com/users?_limit=5'
+  );
+
+  if (response.ok) {
+    const data = await response.json();
+
+    try {
+      validateDataArray(
+        {
+          id: 'number',
+          name: 'string',
+        },
+        data
+      );
+
+      return data;
+    } catch (error) {
+      throw new Error('Invalid format of Users data from server');
+    }
+  } else {
+    throw new Error('Impossible to load Users from server');
+  }
+}
+function validateDataArray(
+  config: {
+    [key: string]: string;
+  },
+  data: unknown
+) {
+  function validateObject(object: { [key: string]: unknown }) {
+    Object.entries(config).forEach(([key, type]) => {
+      if (!(key in object) || typeof object[key] !== type) {
+        throw new Error('Data does not match the configuration');
+      }
+    });
+  }
+
+  if (Array.isArray(data)) {
+    data.forEach((object) => validateObject(object));
+  } else {
+    throw new Error('Data object is not array');
+  }
+}
+async function getTodos() {
+  const response = await fetch(
+    'https://jsonplaceholder.typicode.com/todos?_limit=15'
+  );
+
+  if (response.ok) {
+    const data = await response.json();
+
+    try {
+      validateDataArray(
+        {
+          userId: 'number',
+          id: 'number',
+          title: 'string',
+          completed: 'boolean',
+        },
+        data
+      );
+
+      return data;
+    } catch (error) {
+      throw new Error('Invalid format of Todos data from server');
+    }
+  } else {
+    throw new Error('Impossible to load Todos from server');
+  }
+}
+function renderUserOption(user: User) {
+  const option = new Option(user.name, String(user.id));
+  userSelect?.append(option);
+}
 
 (function () {
   // Globals
