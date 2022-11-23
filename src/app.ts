@@ -49,8 +49,7 @@ async function initApp() {
     }
 
     // Get and render users and todos
-    usersStore = await getUsers();
-    todosStore = await getTodos();
+    [usersStore, todosStore] = await Promise.all([getUsers(), getTodos()]);
 
     usersStore.forEach((user) => renderUserOption(user));
     todosStore.forEach((todo) => renderTodo(todo));
