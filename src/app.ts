@@ -67,7 +67,7 @@ async function handleFormSubmit(event: SubmitEvent) {
 
   try {
     // Get todo from form fields
-    const todo = getTodo();
+    const todo = createTodo();
     // Register
     const registeredTodo = await registerTodo(todo);
     // Render
@@ -81,7 +81,7 @@ async function handleFormSubmit(event: SubmitEvent) {
   }
 }
 
-function getTodo(): UnregisteredTodo | never {
+function createTodo(): UnregisteredTodo {
   const newTodo: UnregisteredTodo = {
     userId: 0,
     title: '',
@@ -103,6 +103,56 @@ function getTodo(): UnregisteredTodo | never {
   }
 
   return newTodo;
+}
+
+async function registerTodo(todo: UnregisteredTodo): Promise<Todo> {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos', {
+    method: 'POST',
+    body: JSON.stringify(todo),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw new Error('Unable to register new todo on server');
+  }
+}
+
+function renderTodo(todo: Todo): void {
+  const li = document.createElement('li');
+  li.className = 'todo-item';
+  li.dataset.id = String(todo.id);
+  li.innerHTML = `<span>${todo.title} <i>by</i> <b>${getUserName(
+    todo.userId
+  )}</b></span>`;
+
+  const input = document.createElement('input');
+  input.className = 'todo-status';
+  input.type = 'checkbox';
+  input.checked = todo.completed;
+
+  const close = document.createElement('span');
+  close.className = 'todo-close';
+  close.textContent = '&times;';
+
+  li.prepend(input);
+  li.append(close);
+
+  if (todoList) {
+    todoList.prepend(li);
+  } else {
+    throw new Error(
+      `Unable to get UL#${GlobalIDs.TODOS_UL_ID} to insert new TODO`
+    );
+  }
+}
+
+function getUserName(userId: number): string {
+  const user = usersStore.find((u) => u.id === userId);
+  return user ? user.name : 'Unknown';
 }
 
 (function () {
