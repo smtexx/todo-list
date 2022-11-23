@@ -271,7 +271,7 @@ var GlobalIDs;
                         todo.completed = status;
                         return [3 /*break*/, 4];
                     case 3:
-                        inputElement = todoList === null || todoList === void 0 ? void 0 : todoList.querySelector("li[data-id=".concat(todoId, "] .todo-status"));
+                        inputElement = todoList === null || todoList === void 0 ? void 0 : todoList.querySelector("li[data-id=\"".concat(todoId, "\"] .todo-status"));
                         if (inputElement instanceof HTMLInputElement) {
                             inputElement.checked = todo.completed;
                         }
@@ -311,7 +311,7 @@ var GlobalIDs;
         // Delete from todosStore
         todosStore = todosStore.filter(function (t) { return t.id !== todoId; });
         // Delete from page
-        var todoElement = todoList === null || todoList === void 0 ? void 0 : todoList.querySelector("li[data-id=".concat(todoId, "]"));
+        var todoElement = todoList === null || todoList === void 0 ? void 0 : todoList.querySelector("li[data-id=\"".concat(todoId, "\"]"));
         todoElement === null || todoElement === void 0 ? void 0 : todoElement.remove();
     }
     function getUsers() {

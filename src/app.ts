@@ -213,7 +213,7 @@ enum GlobalIDs {
         todo.completed = status;
       } else {
         const inputElement = todoList?.querySelector(
-          `li[data-id=${todoId}] .todo-status`
+          `li[data-id="${todoId}"] .todo-status`
         );
 
         if (inputElement instanceof HTMLInputElement) {
@@ -251,7 +251,7 @@ enum GlobalIDs {
     // Delete from todosStore
     todosStore = todosStore.filter((t) => t.id !== todoId);
     // Delete from page
-    const todoElement = todoList?.querySelector(`li[data-id=${todoId}]`);
+    const todoElement = todoList?.querySelector(`li[data-id="${todoId}"]`);
     todoElement?.remove();
   }
   async function getUsers(): Promise<User[]> {
